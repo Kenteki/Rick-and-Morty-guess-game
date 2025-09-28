@@ -26,6 +26,7 @@ Different Morty implementations provide various strategies for removing boxes or
 - **ArgumentValidation.cs** - Validates command-line arguments
 - **FileValidation.cs** - Handles loading of Morty implementations from both .cs and .dll files
 
+**Folder /game** Contains release version of the game.
 
 ### How the Portal Gun Location is Determined
 
