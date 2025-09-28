@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36518.9 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rick_Morty_console_game", "Rick_Morty_console_game.csproj", "{5F46419F-634F-451E-9266-392F1CF6CECD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5F46419F-634F-451E-9266-392F1CF6CECD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F46419F-634F-451E-9266-392F1CF6CECD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F46419F-634F-451E-9266-392F1CF6CECD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F46419F-634F-451E-9266-392F1CF6CECD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7257C5FE-DDBD-4A45-AE04-26405FDA0C6D}
+	EndGlobalSection
+EndGlobal
