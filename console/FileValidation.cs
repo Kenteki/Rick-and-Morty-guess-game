@@ -3,12 +3,15 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Collections.Generic;
+
 
 namespace Rick_Morty_console_game.console
 {
     public class FileValidation
     {
-        private readonly string pathToMods = Path.Combine(Directory.GetCurrentDirectory(), "mods");
+        private readonly string pathToMods = Path.Combine(AppContext.BaseDirectory, "mods");
+
         public Type? GetMortyType(string fileName)
         {
             string fileWithoutExt = Path.GetFileNameWithoutExtension(fileName);
@@ -16,15 +19,15 @@ namespace Rick_Morty_console_game.console
             var dllType = GetTypeFromDll(fileWithoutExt);
             if (dllType != null) return dllType;
 
-
             var csType = GetTypeFromCs(fileWithoutExt);
             if (csType != null) return csType;
 
             return null;
         }
+
         private Type? GetTypeFromDll(string className)
         {
-            string modsPath = Path.Combine(Directory.GetCurrentDirectory(), "mods");
+            string modsPath = pathToMods;
             if (!Directory.Exists(modsPath)) return null;
 
             var dllFiles = Directory.GetFiles(modsPath, "*.dll");
@@ -38,38 +41,47 @@ namespace Rick_Morty_console_game.console
                                         && typeof(IMorty).IsAssignableFrom(t));
                     if (type != null) return type;
                 }
-                catch {}
+                catch { }
             }
             return null;
         }
 
         private Type? GetTypeFromCs(string fileWithoutExt)
         {
-            string csPath = Path.Combine(pathToMods, fileWithoutExt + ".cs");
-            if (!File.Exists(csPath)) return null;
-
             var assembly = Assembly.GetExecutingAssembly();
             var type = assembly.GetTypes()
                 .FirstOrDefault(t => t.Name.Equals(fileWithoutExt, StringComparison.OrdinalIgnoreCase)
                                      && typeof(IMorty).IsAssignableFrom(t));
             return type;
         }
-        public void GetModsFiles()
+
+        public string[] GetAvailableMortyType()
         {
-            if (!Directory.Exists(pathToMods))
+            var availableTypes = new List<string>();
+            string modsPath = pathToMods;
+            if (Directory.Exists(modsPath))
             {
-                Console.WriteLine("Folder 'mods' not found!");
-                return;
+                var dllFiles = Directory.GetFiles(modsPath, "*.dll");
+                foreach (var dll in dllFiles)
+                {
+                    try
+                    {
+                        var assembly = Assembly.LoadFrom(dll);
+                        var types = assembly.GetTypes()
+                            .Where(t => typeof(IMorty).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
+                            .Select(t => t.Name);
+                        availableTypes.AddRange(types);
+                    }
+                    catch { }
+                }
             }
+            var currentAssembly = Assembly.GetExecutingAssembly();
+            var compiledTypes = currentAssembly.GetTypes()
+                .Where(t => typeof(IMorty).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
+                .Select(t => t.Name);
+            availableTypes.AddRange(compiledTypes);
 
-            var files = Directory.GetFiles(pathToMods, "*.*")
-                .Where(f => f.EndsWith(".cs") || f.EndsWith(".dll"))
-                .Select(f => Path.GetFileNameWithoutExtension(f));
-
-            if (!files.Any())
-                Console.WriteLine("No mods found.");
-            else
-                Console.WriteLine("Available mods: " + string.Join(", ", files));
+            return availableTypes.Distinct().ToArray();
         }
     }
 }

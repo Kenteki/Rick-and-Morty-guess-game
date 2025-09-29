@@ -11,22 +11,24 @@ Morty has different implementations with **unique** behaviors
 These behaviors are configurable, you can find it in [configuration of Morty](#configuration-of-morty) section.  
 Different Morty implementations provide various strategies for removing boxes or leaving Rick with different choices.
 
-## Summary
+## Project Structure
 
-### Files description
+### Projects
 
-**Core_Console.cs** Entry point for validation of arguments and files. After success, starts the game.  
-**Folder /mods** Contains Morthy "implemintations". Details you can find in [configuration of Morty](#configuration-of-morty) section.  
-**Folder /core**  
--**Engine.cs** Contains all main game logic and interactions with KeyManager and Morty implementations.    
--**IMorty.cs** Interface defining rules for Morty implementations.  
--**KeyManager.cs** Handles cryptographic key generation and HMAC calculations  
--**Statistics.cs** Displays Game Statistics with all results and calculated probabilities.  
-**Folder /console:**
-- **ArgumentValidation.cs** - Validates command-line arguments
-- **FileValidation.cs** - Handles loading of Morty implementations from both .cs and .dll files
+- **Core** - Contains game logic, interfaces, and cryptographic components
+  - `Engine.cs` - Main game logic and flow
+  - `IMorty.cs` - Interface for Morty implementations
+  - `KeyManager.cs` - Cryptographic key generation and HMAC calculations
+  - `Statistics.cs` - Game statistics display
 
-**Folder /game** Contains release version of the game.
+- **Console** - Argument validation and file handling
+  - `ArgumentValidation.cs` - Command-line argument validation
+  - `FileValidation.cs` - Dynamic loading of Morty implementations
+
+- **App** - Main executable entry point
+  - `Core_Console.cs` - Application entry point
+
+- **ClassicMorty, LazyMorty, EvilMorty** - Separate Morty implementation DLLs
 
 ### How the Portal Gun Location is Determined
 
@@ -78,7 +80,7 @@ Morty implementations must follow the **IMorty** interface with these methods:
 - **SelectBoxesToKeep** - Chooses which boxes remain after removal
 - **CalculateProbability** - Returns theoretical win probability based on strategy
 
-I implemented 3 versions of Morty  
+### Available Implementations
 
 - **Classic Morty**: Always removes boxes, uses random generation for box selection and switching gives `(N-1)/N` probability, staying gives `1/N`  
 - **Lazy Morty**: Removes boxes 70% of the time using lowest index selection.  
@@ -87,18 +89,42 @@ I implemented 3 versions of Morty
 
 ## How to run my project?
 
-To run the project type:  
-`dotnet run N Morthy_Implementation`  
-`N` amount of Boxes  
-`Morhty_Implementation` name of file, you can use with/not extension.  
-This build also supports to run both `.cs` and `.dll` files depends you start build or working from your IDE
-Also program can receive as first argument `mods` `example` `github`.
-
-For build version:
+### From Source (Development)
 ```bash
-dotnet Rick_Morty_console_game.dll 3 ClassicMorty
+dotnet run --project App 3 ClassicMorty
 ```
 
+### From Build (Release)
+```bash
+cd App/bin/Release/net9.0
+./App 3 ClassicMorty
+```
+
+or with .NET runtime:
+```bash
+dotnet App.dll 3 LazyMorty
+```
+
+### Arguments
+- First argument: Number of boxes (integer > 2)
+- Second argument: Morty implementation name (ClassicMorty, LazyMorty, or EvilMorty)
+
+## Building the Project
+
+Build all projects
+```bash
+dotnet build
+```
+Build for release
+```bash
+dotnet build -c Release
+```
+Publish self-contained executable
+```bash
+dotnet publish App -c Release
+```
+
+The build process automatically copies Morty DLLs to the `mods` folder in the output directory.
 
 ### Requirements
 
@@ -121,5 +147,5 @@ if you don't have it, you can istall from
 
 ## Video Demonstration
 
-Video example of the program: [Streamable](https://streamable.com/236ft5)
+Video example of the program: [Streamable](https://streamable.com/71dlbg)
 

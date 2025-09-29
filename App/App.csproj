@@ -1,0 +1,33 @@
+﻿
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj" />
+    <ProjectReference Include="..\Console\Console.csproj" />
+    <ProjectReference Include="..\ClassicMorty\ClassicMorty.csproj" />
+    <ProjectReference Include="..\EvilMorty\EvilMorty.csproj" />
+    <ProjectReference Include="..\LazyMorty\LazyMorty.csproj" />
+  </ItemGroup>
+
+  <Target Name="CopyMortyMods" AfterTargets="Build">
+    <MakeDir Directories="$(OutputPath)mods" Condition="!Exists('$(OutputPath)mods')" />
+    <ItemGroup>
+      <MortyOutput Include="..\ClassicMorty\bin\$(Configuration)\net9.0\ClassicMorty.dll" />
+      <MortyOutput Include="..\EvilMorty\bin\$(Configuration)\net9.0\EvilMorty.dll" />
+      <MortyOutput Include="..\LazyMorty\bin\$(Configuration)\net9.0\LazyMorty.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(MortyOutput)" DestinationFolder="$(OutputPath)mods" SkipUnchangedFiles="true" />
+  </Target>
+    <Target Name="CopyModsToPublish" AfterTargets="Publish">
+    <ItemGroup>
+      <ModsFiles Include="$(OutputPath)mods\**\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(ModsFiles)" DestinationFolder="$(PublishDir)mods\%(RecursiveDir)" SkipUnchangedFiles="true" />
+  </Target>
+</Project>

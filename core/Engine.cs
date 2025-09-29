@@ -1,5 +1,4 @@
-﻿// File: core/Engine.cs (Updated to handle non-removing Morties)
-using System;
+﻿using System;
 
 namespace Rick_Morty_console_game.core
 {

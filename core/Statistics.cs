@@ -12,7 +12,7 @@ namespace Rick_Morty_console_game.core
         public void DisplayStatistics(IMorty mortyType, int amountOfBoxes, int stayedRound, int switchedRound, int stayedWin, int switchedWin)
         {
             var finalProbabilities = calculationProbability(mortyType, amountOfBoxes, stayedRound, switchedRound, stayedWin, switchedWin);
-            Console.WriteLine("                    GAME RESULT");
+            Console.WriteLine("                  GAME STATS");
             var finalTable = new ConsoleTable("Game results", "Rick switched", "Rick stayed");
             finalTable.AddRow("Rounds", switchedRound, stayedRound);
             finalTable.AddRow("Wins", switchedWin, stayedWin);
